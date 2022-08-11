@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj": {}
+    "D:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj": {}
   },
   "projects": {
-    "C:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj": {
+    "D:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj",
+        "projectUniqueName": "D:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj",
         "projectName": "crowdfunding",
-        "projectPath": "C:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj",
+        "projectPath": "D:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj",
         "packagesPath": "C:\\Users\\ladmin\\.nuget\\packages\\",
-        "outputPath": "C:\\projects\\crowdfunding\\crowdfunding\\obj\\",
+        "outputPath": "D:\\projects\\crowdfunding\\crowdfunding\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ladmin\\AppData\\Roaming\\NuGet\\NuGet.Config",

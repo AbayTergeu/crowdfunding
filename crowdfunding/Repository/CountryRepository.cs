@@ -17,7 +17,7 @@ namespace crowdfunding.Repository
 
         public async Task<Country> AddCountry(CountryDto countryDto)
         {
-            var query = "insert into Country(code, name) output INSERTED.ID values(@code, @name);";
+            var query = "insert into Country(code, name) values(@code, @name); SELECT LAST_INSERT_ID();";
             
             using (var connection = _dapper.CreateConnection()) 
             {

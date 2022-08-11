@@ -12,15 +12,13 @@ namespace crowdfunding.Controllers
     public class CrownfundingController : ControllerBase
     {
         private readonly ILogger<CrownfundingController> _logger;
-        private readonly ICompanyRepository _companyRepo;
         private readonly ICountryRepository _countryRepository;
         private readonly IUserService _userService;
         private readonly IPasswordService _passwordService;
 
-        public CrownfundingController(ILogger<CrownfundingController> logger, ICompanyRepository companyRepo, ICountryRepository countryRepository, IUserService userService, IPasswordService passwordService)
+        public CrownfundingController(ILogger<CrownfundingController> logger, ICountryRepository countryRepository, IUserService userService, IPasswordService passwordService)
         {
             _logger = logger;
-            _companyRepo = companyRepo;
             _countryRepository = countryRepository;
             _userService = userService;
             _passwordService = passwordService;
@@ -38,6 +36,7 @@ namespace crowdfunding.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("checkPassword")]
         public IActionResult CheckPassword(string password)
@@ -59,6 +58,7 @@ namespace crowdfunding.Controllers
             return Ok(users);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("getCountries")]
         public async Task<IEnumerable<Country>> GetCountries()
@@ -75,6 +75,7 @@ namespace crowdfunding.Controllers
             return "OK";
         }
 
+        [Authorize]
         [HttpPost]
         [Route("country/create")]
         public async Task<Country> CreateCountry(CountryDto countryDto)

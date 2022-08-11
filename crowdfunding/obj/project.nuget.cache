@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SeIWy5eJbzNftA7dT+BEj++gd8YsvIn0QgOejT93R1zwCVDFEi5lWchQlDaOlL6q8v+2sADMpLkVcqMdGATrfA==",
+  "dgSpecHash": "EU8GDSAgHQmBb9oMoUMLQYSKFINhwsa5Dm+xeEKkYbY9NsbTcwFlYW2OjOdBXvX7nUuByMm670Gn3eT8o57HXg==",
   "success": true,
-  "projectFilePath": "C:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj",
+  "projectFilePath": "D:\\projects\\crowdfunding\\crowdfunding\\crowdfunding.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ladmin\\.nuget\\packages\\aspnet.security.oauth.validation\\2.0.0\\aspnet.security.oauth.validation.2.0.0.nupkg.sha512",
     "C:\\Users\\ladmin\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
