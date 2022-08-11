@@ -1,6 +1,7 @@
 using crowdfunding.Contracts;
 using crowdfunding.Dto;
 using crowdfunding.Entities;
+using crowdfunding.Helpers;
 using crowdfunding.Helpers.Auth;
 using crowdfunding.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,12 @@ namespace crowdfunding.Controllers
         private readonly ILogger<CrownfundingController> _logger;
         private readonly ICountryRepository _countryRepository;
         private readonly IUserService _userService;
-        private readonly IPasswordService _passwordService;
 
-        public CrownfundingController(ILogger<CrownfundingController> logger, ICountryRepository countryRepository, IUserService userService, IPasswordService passwordService)
+        public CrownfundingController(ILogger<CrownfundingController> logger, ICountryRepository countryRepository, IUserService userService)
         {
             _logger = logger;
             _countryRepository = countryRepository;
             _userService = userService;
-            _passwordService = passwordService;
         }
 
         [HttpPost]
@@ -41,7 +40,7 @@ namespace crowdfunding.Controllers
         [Route("checkPassword")]
         public IActionResult CheckPassword(string password)
         {
-            var response = _passwordService.CompareHash(password, "pmWkWSBCL51Bfkhn79xPuKBKHz//H6B+mY6G9/eieuM=");
+            var response = PasswordHelper.CompareHash(password, "pmWkWSBCL51Bfkhn79xPuKBKHz//H6B+mY6G9/eieuM=");
 
             if (!response)
                 return BadRequest(new { message = "password is incorrect" });
@@ -82,6 +81,14 @@ namespace crowdfunding.Controllers
         {
             var country = await _countryRepository.AddCountry(countryDto);
             return country;
+        }
+
+        [HttpPost]
+        [Route("user/create")]
+        public async Task<User> CreateUser(UserDto userDto)
+        {
+            var user = await _userService.Add(userDto);
+            return user;
         }
     }
 }

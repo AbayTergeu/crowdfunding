@@ -1,5 +1,6 @@
 using crowdfunding.Context;
 using crowdfunding.Contracts;
+using crowdfunding.Helpers;
 using crowdfunding.Helpers.Auth;
 using crowdfunding.Repository;
 using crowdfunding.Services;
@@ -20,7 +21,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddControllers();
 
 #region Authentication

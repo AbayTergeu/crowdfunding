@@ -3,6 +3,7 @@ using crowdfunding.Contracts;
 using crowdfunding.Dto;
 using crowdfunding.Entities;
 using Dapper;
+using System.Data;
 
 namespace crowdfunding.Repository
 {
@@ -21,11 +22,8 @@ namespace crowdfunding.Repository
             
             using (var connection = _dapper.CreateConnection()) 
             {
-                var id = connection.ExecuteScalar<int>(query, new
-                {
-                    countryDto.Code,
-                    countryDto.Name
-                });
+                await connection.OpenAsync();
+                var id = await connection.ExecuteAsync(query, countryDto);
                 var country = new Country
                 {
                     Id = id,
@@ -34,6 +32,17 @@ namespace crowdfunding.Repository
                 };
                 return country;
             }            
+        }
+
+        public async Task<Country> GetById(int IdCountry)
+        {
+            using (var connection = _dapper.CreateConnection())
+            {
+                connection.Open();
+                var result = await connection.QueryFirstOrDefaultAsync<Country>("getCountryById", new { IdCountry },
+                                 commandType: CommandType.StoredProcedure);
+                return result;
+            }
         }
 
         public async Task<IEnumerable<Country>> GetCountries()

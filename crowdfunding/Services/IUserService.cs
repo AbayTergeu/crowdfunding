@@ -5,8 +5,9 @@ namespace crowdfunding.Services
 {
     public interface IUserService
     {
-        AuthenticateResponse Authenticate(AuthenticateRequest model);
-        IEnumerable<User> GetAll();
-        User GetById(int id);
+        Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
+        Task<IEnumerable<User>> GetAll();
+        Task<User> GetById(int id);
+        Task<User> Add(UserDto userDto);
     }
 }

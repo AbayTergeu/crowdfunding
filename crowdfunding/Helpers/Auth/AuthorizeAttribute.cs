@@ -9,7 +9,7 @@ namespace crowdfunding.Helpers.Auth
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = (User)context.HttpContext.Items["User"];
+            var user = (Task<User>)context.HttpContext.Items["User"];
             if (user == null)
             {
                 // not logged in

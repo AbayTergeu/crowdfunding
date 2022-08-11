@@ -1,5 +1,7 @@
-﻿using crowdfunding.Dto;
+﻿using crowdfunding.Contracts;
+using crowdfunding.Dto;
 using crowdfunding.Entities;
+using crowdfunding.Helpers;
 using crowdfunding.Helpers.Auth;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,18 +19,22 @@ namespace crowdfunding.Services
     };
 
         private readonly AppSettings _appSettings;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(IOptions<AppSettings> appSettings, IUserRepository userRepository)
         {
+            _userRepository = userRepository;
             _appSettings = appSettings.Value;
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
+        public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
         {
-            var user = _users.SingleOrDefault(x => x.Login == model.Login && x.Password == model.Password);
+            var HashPassword = PasswordHelper.CryptPassword(model.Password);
+            var user = await _userRepository.GetByLogin(model.Login, HashPassword);
 
             // return null if user not found
-            if (user == null) return null;
+            if (user == null) 
+                throw new ArgumentException("user not found");
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
@@ -36,14 +42,14 @@ namespace crowdfunding.Services
             return new AuthenticateResponse(user, token);
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            return _users;
+            return await _userRepository.GetList();
         }
 
-        public User GetById(int id)
+        public async Task<User> GetById(int id)
         {
-            var user = _users.FirstOrDefault(x => x.Id == id);
+            var user = await _userRepository.GetById(id);
             return user;
         }
 
@@ -62,6 +68,22 @@ namespace crowdfunding.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<User> Add(UserDto userDto)
+        {
+            if (await IsExistsUser(userDto.Login, userDto.Mobile))
+                throw new ArgumentException("User by Login or Mobile already exists");
+            userDto.Password = PasswordHelper.CryptPassword(userDto.Password);
+            return await _userRepository.Add(userDto);
+        }
+
+        public async Task<bool> IsExistsUser(string userLogin, string userMobile)
+        {
+            var user = await _userRepository.GetUserByLoginOrMobile(userLogin, userMobile);
+            if (user != null)
+                return true;
+            return false;
         }
     }
 }

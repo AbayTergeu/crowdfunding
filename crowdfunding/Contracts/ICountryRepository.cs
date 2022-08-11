@@ -5,7 +5,10 @@ namespace crowdfunding.Contracts
 {
     public interface ICountryRepository
     {
-        public Task<IEnumerable<Country>> GetCountries();
-        public Task<Country> AddCountry(CountryDto countryDto);
+        Task<IEnumerable<Country>> GetCountries();
+        Task<Country> AddCountry(CountryDto countryDto);
+
+        Task<Country> GetById(int id);
+        
     }
 }
