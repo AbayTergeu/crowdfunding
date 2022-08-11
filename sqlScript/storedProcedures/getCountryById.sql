@@ -1,6 +1,6 @@
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountryById`(in IdCountry integer)
-BEGIN
+DELIMITER //
+create procedure getCountryById(in IdCountry integer)
+begin
 	select * from Country where ID = IdCountry;
-END$$
-DELIMITER ;
+end
+//
