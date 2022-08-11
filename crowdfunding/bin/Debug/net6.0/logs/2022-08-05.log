@@ -1,0 +1,2 @@
+2022-08-05 14:31:08.3993 | DEBUG | crowdfunding.Controllers.CrownfundingController | System.Collections.Generic.List`1[crowdfunding.Entities.Country]
+2022-08-05 14:32:18.0397 | DEBUG | crowdfunding.Controllers.CrownfundingController | countries :{ countries = System.Collections.Generic.List`1[crowdfunding.Entities.Country] }

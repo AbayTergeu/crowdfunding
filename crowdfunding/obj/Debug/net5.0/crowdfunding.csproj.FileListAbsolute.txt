@@ -1,0 +1,7 @@
+C:\projects\2\crowdfunding\crowdfunding\obj\Debug\net5.0\crowdfunding.csproj.AssemblyReference.cache
+C:\projects\2\crowdfunding\crowdfunding\obj\Debug\net5.0\crowdfunding.GeneratedMSBuildEditorConfig.editorconfig
+C:\projects\2\crowdfunding\crowdfunding\obj\Debug\net5.0\crowdfunding.AssemblyInfoInputs.cache
+C:\projects\2\crowdfunding\crowdfunding\obj\Debug\net5.0\crowdfunding.AssemblyInfo.cs
+C:\projects\2\crowdfunding\crowdfunding\obj\Debug\net5.0\crowdfunding.csproj.CoreCompileInputs.cache
+C:\projects\2\crowdfunding\crowdfunding\obj\Debug\net5.0\crowdfunding.MvcApplicationPartsAssemblyInfo.cs
+C:\projects\2\crowdfunding\crowdfunding\obj\Debug\net5.0\crowdfunding.MvcApplicationPartsAssemblyInfo.cache
