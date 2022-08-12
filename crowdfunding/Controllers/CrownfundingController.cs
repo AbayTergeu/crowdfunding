@@ -36,19 +36,6 @@ namespace crowdfunding.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        [Route("checkPassword")]
-        public IActionResult CheckPassword(string password)
-        {
-            var response = PasswordHelper.CompareHash(password, "pmWkWSBCL51Bfkhn79xPuKBKHz//H6B+mY6G9/eieuM=");
-
-            if (!response)
-                return BadRequest(new { message = "password is incorrect" });
-
-            return Ok(response);
-        }
-
-        [Authorize]
         [HttpGet]
         [Route("getAll")]
         public IActionResult GetAll()

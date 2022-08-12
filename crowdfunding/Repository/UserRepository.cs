@@ -2,7 +2,6 @@
 using crowdfunding.Contracts;
 using crowdfunding.Dto;
 using crowdfunding.Entities;
-using crowdfunding.Helpers;
 using Dapper;
 using System.Data;
 
@@ -28,8 +27,22 @@ namespace crowdfunding.Repository
                 "values (@Name, @Surname, @InvestorID, @Email, @Mobile, @Login, @Password, @isAcceptedContract, @CountryId); SELECT LAST_INSERT_ID();";
             using (var connection = _dapperContext.CreateConnection())
             {
+                 
                 await connection.OpenAsync();
-                var id = await connection.ExecuteAsync(query, userDto);
+                var trans = connection.BeginTransaction();
+                try
+                {
+                    var id = await connection.ExecuteAsync(query, userDto);
+                trans.Commit();
+                }
+                catch (Exception)
+                {
+                    trans.Rollback();
+                }
+                finally
+                {
+                    connection.Close();
+                }
                 return await GetByLogin(userDto.Login, userDto.Password);
             }
         }
