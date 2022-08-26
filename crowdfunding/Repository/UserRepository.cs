@@ -11,39 +11,46 @@ namespace crowdfunding.Repository
     {
         private readonly DapperContext _dapperContext;
         private readonly ICountryRepository _countryRepository;
+        private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(DapperContext dapperContext, ICountryRepository countryRepository) {
+        public UserRepository(DapperContext dapperContext, ICountryRepository countryRepository, ILogger<UserRepository> logger)
+        {
             _dapperContext = dapperContext;
             _countryRepository = countryRepository;
+            _logger = logger;
         }
 
         public async Task<User> Add(UserDto userDto)
         {
-            Country? country = await _countryRepository.GetById(userDto.CountryId);
-            if (country == null)
-                throw new ArgumentException("Country not found by id");
+            if (userDto.CountryId != null)
+            {
+                Country? country = await _countryRepository.GetById((int)userDto.CountryId);
+                if (country == null)
+                    throw new ArgumentException("Country not found by id");
+            }
             
             var query = "insert into Investor(Name, Surname, InvestorID, email, mobile, login, password, isAcceptedContract, CountryID)" +
-                "values (@Name, @Surname, @InvestorID, @Email, @Mobile, @Login, @Password, @isAcceptedContract, @CountryId); SELECT LAST_INSERT_ID();";
+                "values (@Name, @Surname, @InvestorID, @Email, @Mobile, @Username , @Password, @isAcceptedContract, @CountryId); SELECT LAST_INSERT_ID();";
             using (var connection = _dapperContext.CreateConnection())
             {
-                 
                 await connection.OpenAsync();
                 var trans = connection.BeginTransaction();
                 try
                 {
                     var id = await connection.ExecuteAsync(query, userDto);
-                trans.Commit();
+                    trans.Commit();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    _logger.LogInformation("error", ex);
                     trans.Rollback();
+                    throw new Exception(ex.Message);
                 }
                 finally
                 {
                     connection.Close();
                 }
-                return await GetByLogin(userDto.Login, userDto.Password);
+                return await GetByLogin(userDto.Username, userDto.Password);
             }
         }
 
@@ -51,7 +58,7 @@ namespace crowdfunding.Repository
         {
             using (var connection = _dapperContext.CreateConnection())
             {
-                var user = await connection.QueryFirstOrDefaultAsync<User>("getInvestorById", new { userId}, commandType: System.Data.CommandType.StoredProcedure);
+                var user = await connection.QueryFirstOrDefaultAsync<User>("getUserById", new { userId}, commandType: System.Data.CommandType.StoredProcedure);
                 return user;
             }
         }
@@ -81,6 +88,24 @@ namespace crowdfunding.Repository
             {
                 var userList = await connection.QueryAsync<User>(query);
                 return userList;
+            }
+        }
+
+        public async Task<User> GetByEmail(string userEmail)
+        {
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                var user = await connection.QueryFirstOrDefaultAsync<User>("getUserByEmail", new { userEmail }, commandType: CommandType.StoredProcedure);
+                return user;
+            }
+        }
+
+        public async Task<User> GetByLogin(string userLogin)
+        {
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                var user = await connection.QueryFirstOrDefaultAsync<User>("getUserByLogin", new { userLogin }, commandType: CommandType.StoredProcedure);
+                return user;
             }
         }
     }

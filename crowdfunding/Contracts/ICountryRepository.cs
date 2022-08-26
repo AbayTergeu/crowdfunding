@@ -9,6 +9,8 @@ namespace crowdfunding.Contracts
         Task<Country> AddCountry(CountryDto countryDto);
 
         Task<Country> GetById(int id);
-        
+        Task<Country> GetByCode(string countryCode);
+
+
     }
 }

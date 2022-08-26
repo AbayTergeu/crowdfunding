@@ -45,6 +45,18 @@ namespace crowdfunding.Repository
             }
         }
 
+        public async Task<Country> GetByCode(string countryCode)
+        {
+            using (var connection = _dapper.CreateConnection())
+            {
+                connection.Open();
+                var result = await connection.QueryFirstOrDefaultAsync<Country>("getCountryByCode", new { countryCode },
+                                 commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+
+
         public async Task<IEnumerable<Country>> GetCountries()
         {
             var query = "select ID, code, name from Country";

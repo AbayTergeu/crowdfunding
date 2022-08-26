@@ -1,7 +1,6 @@
 using crowdfunding.Contracts;
 using crowdfunding.Dto;
 using crowdfunding.Entities;
-using crowdfunding.Helpers;
 using crowdfunding.Helpers.Auth;
 using crowdfunding.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace crowdfunding.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/crownfunding")]
     public class CrownfundingController : ControllerBase
     {
         private readonly ILogger<CrownfundingController> _logger;
@@ -21,18 +20,6 @@ namespace crowdfunding.Controllers
             _logger = logger;
             _countryRepository = countryRepository;
             _userService = userService;
-        }
-
-        [HttpPost]
-        [Route("authenticate")]
-        public IActionResult Authenticate(AuthenticateRequest model)
-        {
-            var response = _userService.Authenticate(model);
-
-            if (response == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(response);
         }
 
         [Authorize]

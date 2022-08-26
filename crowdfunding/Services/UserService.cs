@@ -27,17 +27,12 @@ namespace crowdfunding.Services
             _appSettings = appSettings.Value;
         }
 
-        public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
+        public async Task<AuthenticateResponse> Authenticate(User user)
         {
-            var HashPassword = PasswordHelper.CryptPassword(model.Password);
-            var user = await _userRepository.GetByLogin(model.Login, HashPassword);
-
-            // return null if user not found
-            if (user == null) 
-                throw new ArgumentException("user not found");
+            
 
             // authentication successful so generate jwt token
-            var token = generateJwtToken(user);
+            var token = GenerateJwtToken(user.Id);
 
             return new AuthenticateResponse(user, token);
         }
@@ -55,15 +50,15 @@ namespace crowdfunding.Services
 
         // helper methods
 
-        private string generateJwtToken(User user)
+        public string GenerateJwtToken(int Id)
         {
             // generate token that is valid for 15 minutes
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", Id.ToString()) }),
+                Expires = DateTime.UtcNow.AddMinutes(_appSettings.JwtLifespan),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -72,7 +67,7 @@ namespace crowdfunding.Services
 
         public async Task<User> Add(UserDto userDto)
         {
-            if (await IsExistsUser(userDto.Login, userDto.Mobile))
+            if (userDto.Username != null && userDto.Mobile != null && await IsExistsUser(userDto.Username, userDto.Mobile))
                 throw new ArgumentException("User by Login or Mobile already exists");
             userDto.Password = PasswordHelper.CryptPassword(userDto.Password);
             return await _userRepository.Add(userDto);
